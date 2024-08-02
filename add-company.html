@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <title>Add Company - Shyam Play Manual</title>
+    <link rel="stylesheet" href="./add-company.css" />
+</head>
+
+<body>
+    <!-- navbar -->
+    <nav class="navbar">
+        <div class="logo_item">
+            <i class="bx bx-menu" id="sidebarOpen"></i>
+            <img src="./images/logo.png" alt=""></i>
+        </div>
+
+        <div class="navbar_content">
+            <img src="./images/profile.jpg" alt="" class="profile" />
+        </div>
+    </nav>
+
+    <!-- sidebar -->
+    <nav class="sidebar">
+        <div class="menu_content">
+            <ul class="menu_items">
+                <!-- duplicate or remove this li tag if you want to add or remove navlink with submenu -->
+                <!-- start -->
+                <li class="item">
+                    <a href="./dashboard.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class="bx bxs-dashboard"></i>
+                        </span>
+                        <span class="navlink">Dashboard</span>
+                    </a>
+                </li>
+                <!-- end -->
+            </ul>
+
+            <ul class="menu_items">
+                <!-- duplicate these li tag if you want to add or remove navlink only -->
+                <!-- Start -->
+                <li class="item">
+                    <a href="./add-company.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bx-building-house'></i>
+                        </span>
+                        <span class="navlink">Add Company</span>
+                    </a>
+                </li>
+
+                <li class="item">
+                    <a href="./all-company-list.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-user-pin'></i>
+                        </span>
+                        <span class="navlink">All Company List</span>
+                    </a>
+                </li>
+
+                <li class="item">
+                    <a href="./user-list.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-star'></i>
+                        </span>
+                        <span class="navlink">User List</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./created-id.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bx-list-ol'></i>
+                        </span>
+                        <span class="navlink">Created ID</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./add-payment.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-info-circle'></i>
+                        </span>
+                        <span class="navlink">Add Payment</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./payment-list.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-book-content'></i>
+                        </span>
+                        <span class="navlink">Payment List</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./deposit-withdrawal-request.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bx-money-withdraw'></i>
+                        </span>
+                        <span class="navlink">D/W Requests</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./password-request.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-key'></i>
+                        </span>
+                        <span class="navlink">Password Requests</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Sidebar Open / Close -->
+            <div class="bottom_content">
+                <div class="bottom expand_sidebar">
+                    <span> Expand</span>
+                    <i class='bx bx-log-in'></i>
+                </div>
+                <div class="bottom collapse_sidebar">
+                    <span> Collapse</span>
+                    <i class='bx bx-log-out'></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard -->
+
+    <section class="dashboard-main-box">
+        <h2>Add New Company</h2>
+        <form id="addCompanyForm" class="agent-form-big-box">
+            <input id="company_name" type="text" name="company_name" placeholder="Add Company Name" required>
+            <input id="website_link" type="text" name="website_link" placeholder="Add Website Link" required>
+            <input id="name" type="text" name="name" placeholder="Add Demo Username" required>
+            <input id="password" type="text" name="password" placeholder="Add Demo Password" required>
+            <label for="">Add Company Logo</label>
+            <input id="logo" type="file" name="logo" accept="image/*">
+            <input type="submit" value="Add Company">
+        </form>
+    </section>
+    <!-- JavaScript -->
+    <script src="./script.js"></script>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const addCompanyForm = document.getElementById('addCompanyForm');
+
+        addCompanyForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(addCompanyForm);
+
+            try {
+                const response = await fetch('https://manual.shyamplay.in/create-company', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`, // Ensure to set token in localStorage
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Company created successfully');
+                    // Handle successful response (e.g., redirect or reset form)
+                } else {
+                    alert(`Error: ${data.error}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while creating the company.');
+            }
+        });
+    });
+</script>
+</html>

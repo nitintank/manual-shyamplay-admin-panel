@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <title>Dashboard - Shyam Play Manual</title>
+    <link rel="stylesheet" href="./dashboard.css" />
+</head>
+
+<body>
+    <!-- navbar -->
+    <nav class="navbar">
+        <div class="logo_item">
+            <i class="bx bx-menu" id="sidebarOpen"></i>
+            <img src="./images/logo.png" alt=""></i>
+        </div>
+
+        <div class="navbar_content">
+            <img src="./images/profile.jpg" alt="" class="profile" />
+        </div>
+    </nav>
+
+    <!-- sidebar -->
+    <nav class="sidebar">
+        <div class="menu_content">
+            <ul class="menu_items">
+                <!-- duplicate or remove this li tag if you want to add or remove navlink with submenu -->
+                <!-- start -->
+                <li class="item">
+                    <a href="./dashboard.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class="bx bxs-dashboard"></i>
+                        </span>
+                        <span class="navlink">Dashboard</span>
+                    </a>
+                </li>
+                <!-- end -->
+            </ul>
+
+            <ul class="menu_items">
+                <!-- duplicate these li tag if you want to add or remove navlink only -->
+                <!-- Start -->
+                <li class="item">
+                    <a href="./add-company.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bx-building-house'></i>
+                        </span>
+                        <span class="navlink">Add Company</span>
+                    </a>
+                </li>
+
+                <li class="item">
+                    <a href="./all-company-list.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-user-pin'></i>
+                        </span>
+                        <span class="navlink">All Company List</span>
+                    </a>
+                </li>
+
+                <li class="item">
+                    <a href="./user-list.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-star'></i>
+                        </span>
+                        <span class="navlink">User List</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./created-id.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bx-list-ol'></i>
+                        </span>
+                        <span class="navlink">Created ID</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./add-payment.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-info-circle'></i>
+                        </span>
+                        <span class="navlink">Add Payment</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./payment-list.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-book-content'></i>
+                        </span>
+                        <span class="navlink">Payment List</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./deposit-withdrawal-request.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bx-money-withdraw'></i>
+                        </span>
+                        <span class="navlink">D/W Requests</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./password-request.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-key'></i>
+                        </span>
+                        <span class="navlink">Password Requests</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Sidebar Open / Close -->
+            <div class="bottom_content">
+                <div class="bottom expand_sidebar">
+                    <span> Expand</span>
+                    <i class='bx bx-log-in'></i>
+                </div>
+                <div class="bottom collapse_sidebar">
+                    <span> Collapse</span>
+                    <i class='bx bx-log-out'></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard -->
+
+    <section class="dashboard-main-box">
+        <h2>Dashboard</h2>
+        <div class="dashboard-content-cards-big-box">
+            <div class="dashboard-content-cards">
+                <img src="./images/ad-ico-1.png" alt="">
+                <p>All Users</p>
+                <h4>546</h4>
+            </div>
+            <div class="dashboard-content-cards">
+                <img src="./images/ad-ico-2.png" alt="">
+                <p>All Company</p>
+                <h4>684</h4>
+            </div>
+            <div class="dashboard-content-cards">
+                <img src="./images/ad-ico-3.png" alt="">
+                <p>Active ID's</p>
+                <h4>999</h4>
+            </div>
+            <div class="dashboard-content-cards">
+                <img src="./images/ad-ico-4.png" alt="">
+                <p>Payment Details</p>
+                <h4>75</h4>
+            </div>
+        </div>
+    </section>
+    <!-- JavaScript -->
+    <script src="./script.js"></script>
+</body>
+
+</html>

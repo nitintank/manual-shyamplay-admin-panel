@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <title>Edit Bank Details - Shyam Play Manual</title>
+    <link rel="stylesheet" href="./edit-payment-list.css" />
+</head>
+
+<body>
+    <!-- navbar -->
+    <nav class="navbar">
+        <div class="logo_item">
+            <i class="bx bx-menu" id="sidebarOpen"></i>
+            <img src="./images/logo.png" alt=""></i>
+        </div>
+
+        <div class="navbar_content">
+            <img src="./images/profile.jpg" alt="" class="profile" />
+        </div>
+    </nav>
+
+    <!-- sidebar -->
+    <nav class="sidebar">
+        <div class="menu_content">
+            <ul class="menu_items">
+                <!-- duplicate or remove this li tag if you want to add or remove navlink with submenu -->
+                <!-- start -->
+                <li class="item">
+                    <a href="./dashboard.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class="bx bxs-dashboard"></i>
+                        </span>
+                        <span class="navlink">Dashboard</span>
+                    </a>
+                </li>
+                <!-- end -->
+            </ul>
+
+            <ul class="menu_items">
+                <!-- duplicate these li tag if you want to add or remove navlink only -->
+                <!-- Start -->
+                <li class="item">
+                    <a href="./add-company.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bx-building-house'></i>
+                        </span>
+                        <span class="navlink">Add Company</span>
+                    </a>
+                </li>
+
+                <li class="item">
+                    <a href="./all-company-list.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-user-pin'></i>
+                        </span>
+                        <span class="navlink">All Company List</span>
+                    </a>
+                </li>
+
+                <li class="item">
+                    <a href="./user-list.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-star'></i>
+                        </span>
+                        <span class="navlink">User List</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./created-id.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bx-list-ol'></i>
+                        </span>
+                        <span class="navlink">Created ID</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./add-payment.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-info-circle'></i>
+                        </span>
+                        <span class="navlink">Add Payment</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./payment-list.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-book-content'></i>
+                        </span>
+                        <span class="navlink">Payment List</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./deposit-withdrawal-request.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bx-money-withdraw'></i>
+                        </span>
+                        <span class="navlink">D/W Requests</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./password-request.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-key'></i>
+                        </span>
+                        <span class="navlink">Password Requests</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Sidebar Open / Close -->
+            <div class="bottom_content">
+                <div class="bottom expand_sidebar">
+                    <span> Expand</span>
+                    <i class='bx bx-log-in'></i>
+                </div>
+                <div class="bottom collapse_sidebar">
+                    <span> Collapse</span>
+                    <i class='bx bx-log-out'></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard -->
+
+    <section class="dashboard-main-box">
+        <h2>Add Payment Method</h2>
+        <form class="agent-form-big-box" id="bankDetailsForm" enctype="multipart/form-data">
+                <h3>Edit Bank Details</h3>
+                <input id="bankName" type="text" placeholder="Enter Bank Name" required>
+                <input id="accountName" type="text" placeholder="Enter Account Name" required>
+                <input id="bankAccountNumber" type="text" placeholder="Enter Account Number" required>
+                <input id="ifscCode" type="text" placeholder="Enter IFSC Code" required>
+                <input type="submit" value="Update">
+        </form>
+    </section>
+    <!-- JavaScript -->
+    <script src="./script.js"></script>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const bankDetailsForm = document.getElementById('bankDetailsForm');
+        const bankNameInput = document.getElementById('bankName');
+        const bankAccountNumberInput = document.getElementById('bankAccountNumber');
+        const ifscCodeInput = document.getElementById('ifscCode');
+        const accountNameInput = document.getElementById('accountName');
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+
+        async function fetchDetails() {
+            try {
+                const response = await fetch(`https://manual.shyamplay.in/admin-bank-details/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch details');
+                }
+
+                const data = await response.json();
+                const { bank_detail } = data;
+
+                if (bankNameInput) bankNameInput.value = bank_detail.bank_name;
+                if (bankAccountNumberInput) bankAccountNumberInput.value = bank_detail.bank_account_number;
+                if (ifscCodeInput) ifscCodeInput.value = bank_detail.ifsc_code;
+                if (accountNameInput) accountNameInput.value = bank_detail.account_name;
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            formData.append('bank_name', bankNameInput.value);
+            formData.append('bank_account_number', bankAccountNumberInput.value);
+            formData.append('ifsc_code', ifscCodeInput.value);
+            formData.append('account_name', accountNameInput.value);
+
+            try {
+                const response = await fetch(`https://manual.shyamplay.in/admin-bank-details/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                    },
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to update details');
+                }
+
+                alert('Details updated successfully');
+                window.location.href = '/payment-list.html'; // Redirect after success
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+
+        bankDetailsForm.addEventListener('submit', handleSubmit);
+
+        if (id) {
+            fetchDetails();
+        }
+    });
+</script>
+</html>
