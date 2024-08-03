@@ -19,27 +19,14 @@
         </div>
 
         <div class="navbar_content">
-            <img src="./images/profile.jpg" alt="" class="profile" />
+            <a href="./profile.html"><img src="./images/profile.jpg" alt="" class="profile" /></a>
+            <button class="log-out-btn" onclick="handleLogout()"><i class='bx bx-log-out-circle'></i> Log Out</button>
         </div>
     </nav>
 
     <!-- sidebar -->
     <nav class="sidebar">
         <div class="menu_content">
-            <ul class="menu_items">
-                <!-- duplicate or remove this li tag if you want to add or remove navlink with submenu -->
-                <!-- start -->
-                <li class="item">
-                    <a href="./dashboard.html" class="nav_link">
-                        <span class="navlink_icon">
-                            <i class="bx bxs-dashboard"></i>
-                        </span>
-                        <span class="navlink">Dashboard</span>
-                    </a>
-                </li>
-                <!-- end -->
-            </ul>
-
             <ul class="menu_items">
                 <!-- duplicate these li tag if you want to add or remove navlink only -->
                 <!-- Start -->
@@ -167,40 +154,40 @@
     <script src="./script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-    const loadingElement = document.getElementById('loading');
-    const errorElement = document.getElementById('error');
-    const userCreateIdTable = document.getElementById('customers');
-    const userCreateIdTableBody = document.getElementById('userCreateIdTableBody');
-    const modal = document.getElementById('modal');
-    const closeModal = document.getElementById('closeModal');
-    const modalForm = document.getElementById('modalForm');
-    let currentCreditId = null;
-    let originalPaymentStatus = null;  // Track the original payment status
+            const loadingElement = document.getElementById('loading');
+            const errorElement = document.getElementById('error');
+            const userCreateIdTable = document.getElementById('customers');
+            const userCreateIdTableBody = document.getElementById('userCreateIdTableBody');
+            const modal = document.getElementById('modal');
+            const closeModal = document.getElementById('closeModal');
+            const modalForm = document.getElementById('modalForm');
+            let currentCreditId = null;
+            let originalPaymentStatus = null;  // Track the original payment status
 
-    const fetchUsers = async () => {
-        try {
-            const response = await fetch('https://manual.shyamplay.in/admin/user-created-ids', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+            const fetchUsers = async () => {
+                try {
+                    const response = await fetch('https://manual.shyamplay.in/admin/user-created-ids', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user created IDs');
+                    }
+                    const data = await response.json();
+                    populateUsers(data);
+                } catch (err) {
+                    showError(err.message);
+                } finally {
+                    loadingElement.style.display = 'none';
                 }
-            });
-            if (!response.ok) {
-                throw new Error('Failed to fetch user created IDs');
-            }
-            const data = await response.json();
-            populateUsers(data);
-        } catch (err) {
-            showError(err.message);
-        } finally {
-            loadingElement.style.display = 'none';
-        }
-    };
+            };
 
-    const populateUsers = (users) => {
-        users.forEach((user, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
+            const populateUsers = (users) => {
+                users.forEach((user, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
                 <td>${index + 1}</td>
                 <td>${user.company_name}</td>
                 <td>${user.website_link}</td>
@@ -219,103 +206,106 @@
                     </select>
                 </td>
             `;
-            userCreateIdTableBody.appendChild(row);
-        });
-        userCreateIdTable.style.display = 'table';
-    };
+                    userCreateIdTableBody.appendChild(row);
+                });
+                userCreateIdTable.style.display = 'table';
+            };
 
-    const showError = (message) => {
-        errorElement.textContent = message;
-        errorElement.style.display = 'block';
-    };
+            const showError = (message) => {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            };
 
-    window.updateCredit = async (creditId, paymentStatus) => {
-        try {
-            const response = await fetch(`https://manual.shyamplay.in/admin/credit/${creditId}/update`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ payment_status: paymentStatus })
+            window.updateCredit = async (creditId, paymentStatus) => {
+                try {
+                    const response = await fetch(`https://manual.shyamplay.in/admin/credit/${creditId}/update`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ payment_status: paymentStatus })
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to update credit');
+                    }
+                    if (paymentStatus === 'completed') {
+                        currentCreditId = creditId;
+                        const selectElement = document.querySelector(`select[onchange*="${creditId}"]`);
+                        originalPaymentStatus = selectElement.dataset.originalStatus;  // Save original status
+                        openModal();
+                    } else {
+                        const status = paymentStatus === 'rejected' ? 'rejected' : 'pending';
+                        updateTable(creditId, paymentStatus, status);
+                    }
+                } catch (err) {
+                    console.error(err.message);
+                }
+            };
+
+            const openModal = () => {
+                modal.style.display = 'flex';
+            };
+
+            const closeModalHandler = () => {
+                if (originalPaymentStatus !== null) {  // Restore the original status if needed
+                    updateTable(currentCreditId, originalPaymentStatus, originalPaymentStatus);
+                }
+                modal.style.display = 'none';
+            };
+
+            closeModal.addEventListener('click', closeModalHandler);
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModalHandler();
+                }
             });
-            if (!response.ok) {
-                throw new Error('Failed to update credit');
-            }
-            if (paymentStatus === 'completed') {
-                currentCreditId = creditId;
-                const selectElement = document.querySelector(`select[onchange*="${creditId}"]`);
-                originalPaymentStatus = selectElement.dataset.originalStatus;  // Save original status
-                openModal();
-            } else {
-                const status = paymentStatus === 'rejected' ? 'rejected' : 'pending';
-                updateTable(creditId, paymentStatus, status);
-            }
-        } catch (err) {
-            console.error(err.message);
-        }
-    };
 
-    const openModal = () => {
-        modal.style.display = 'flex';
-    };
+            modalForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const formData = new FormData(modalForm);
+                const username = formData.get('username');
+                const password = formData.get('password');
 
-    const closeModalHandler = () => {
-        if (originalPaymentStatus !== null) {  // Restore the original status if needed
-            updateTable(currentCreditId, originalPaymentStatus, originalPaymentStatus);
-        }
-        modal.style.display = 'none';
-    };
-
-    closeModal.addEventListener('click', closeModalHandler);
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            closeModalHandler();
-        }
-    });
-
-    modalForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const formData = new FormData(modalForm);
-        const username = formData.get('username');
-        const password = formData.get('password');
-
-        try {
-            const response = await fetch(`https://manual.shyamplay.in/admin/user-createid/${currentCreditId}/update-details`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
+                try {
+                    const response = await fetch(`https://manual.shyamplay.in/admin/user-createid/${currentCreditId}/update-details`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to update user details');
+                    }
+                    closeModalHandler();
+                    updateTable(currentCreditId, 'completed', 'approved');
+                    currentCreditId = null;
+                    originalPaymentStatus = null;  // Clear original status
+                } catch (err) {
+                    console.error(err.message);
+                }
             });
-            if (!response.ok) {
-                throw new Error('Failed to update user details');
-            }
-            closeModalHandler();
-            updateTable(currentCreditId, 'completed', 'approved');
-            currentCreditId = null;
-            originalPaymentStatus = null;  // Clear original status
-        } catch (err) {
-            console.error(err.message);
-        }
-    });
 
-    const updateTable = (creditId, paymentStatus, status) => {
-        const rows = userCreateIdTableBody.querySelectorAll('tr');
-        rows.forEach(row => {
-            const selectElement = row.querySelector('select');
-            if (parseInt(selectElement.getAttribute('onchange').match(/\d+/)[0]) === creditId) {
-                row.querySelector('.payment-status').textContent = paymentStatus;
-                row.querySelector('.status').textContent = (status === 'approved' && paymentStatus === 'completed') ? 'approved' : status;
-                selectElement.value = paymentStatus;  // Update select box to match status
-            }
+            const updateTable = (creditId, paymentStatus, status) => {
+                const rows = userCreateIdTableBody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const selectElement = row.querySelector('select');
+                    if (parseInt(selectElement.getAttribute('onchange').match(/\d+/)[0]) === creditId) {
+                        row.querySelector('.payment-status').textContent = paymentStatus;
+                        row.querySelector('.status').textContent = (status === 'approved' && paymentStatus === 'completed') ? 'approved' : status;
+                        selectElement.value = paymentStatus;  // Update select box to match status
+                    }
+                });
+            };
+
+            fetchUsers();
         });
-    };
-
-    fetchUsers();
-});
-
+        const handleLogout = () => {
+            localStorage.clear()
+            location.href = "/"
+        };
     </script>
 </body>
 

@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Boxicons CSS -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <title>Add Company - Shyam Play Manual</title>
-    <link rel="stylesheet" href="./add-company.css" />
+    <title>Profile - Shyam Play Manual</title>
+    <link rel="stylesheet" href="./profile.css" />
 </head>
 
 <body>
@@ -115,51 +115,113 @@
     <!-- Dashboard -->
 
     <section class="dashboard-main-box">
-        <h2>Add New Company</h2>
-        <form id="addCompanyForm" class="agent-form-big-box">
-            <input id="company_name" type="text" name="company_name" placeholder="Add Company Name" required>
-            <input id="website_link" type="text" name="website_link" placeholder="Add Website Link" required>
-            <input id="name" type="text" name="name" placeholder="Add Demo Username" required>
-            <input id="password" type="text" name="password" placeholder="Add Demo Password" required>
-            <label for="">Add Company Logo</label>
-            <input id="logo" type="file" name="logo" accept="image/*">
-            <input type="submit" value="Add Company">
+
+        <div class="profileDetails">
+            <h2>User Profile</h2>
+            <p id="loading">Loading...</p>
+            <p id="error" style="color: red;"></p>
+            <div id="profile" style="display: none;">
+                <p>Username: <strong><span id="username"></span></strong></p>
+                <p>Phone No: <strong><span id="phone_number"></span></strong></p>
+            </div>
+        </div>
+
+        <h2>Change Password</h2>
+        <form id="changePasswordForm" class="agent-form-big-box">
+            <input type="text" id="oldPassword" placeholder="Enter Old Password" required>
+            <input type="text" id="newPassword" placeholder="Enter New Password" required>
+            <input type="text" id="confirmPassword" placeholder="Enter Confirm Password" required>
+            <input type="submit" value="Update Password">
         </form>
+
+        <p id="error" class="error"></p>
+        <p id="success" class="success"></p>
+
     </section>
     <!-- JavaScript -->
     <script src="./script.js"></script>
 </body>
 <script>
+    document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const oldPassword = document.getElementById('oldPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const errorElement = document.getElementById('error');
+        const successElement = document.getElementById('success');
+
+        if (!oldPassword || !newPassword || !confirmPassword) {
+            errorElement.textContent = 'All fields are required';
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            errorElement.textContent = 'New password and confirm password must match';
+            return;
+        }
+
+        try {
+            const response = await fetch('https://manual.shyamplay.in/change-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                body: JSON.stringify({
+                    old_password: oldPassword,
+                    new_password: newPassword,
+                    confirm_password: confirmPassword
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                errorElement.textContent = data.error || 'Failed to change password';
+            } else {
+                successElement.textContent = data.message;
+                document.getElementById('oldPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+                errorElement.textContent = '';
+            }
+        } catch (error) {
+            errorElement.textContent = 'Failed to change password';
+        }
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
-        const addCompanyForm = document.getElementById('addCompanyForm');
+        const loadingElement = document.getElementById('loading');
+        const errorElement = document.getElementById('error');
+        const profileElement = document.getElementById('profile');
 
-        addCompanyForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const formData = new FormData(addCompanyForm);
-
+        const fetchProfile = async () => {
             try {
-                const response = await fetch('https://manual.shyamplay.in/create-company', {
-                    method: 'POST',
+                const response = await fetch('https://manual.shyamplay.in/profile', {
+                    method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`, // Ensure to set token in localStorage
-                    },
-                    body: formData
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                    }
                 });
 
-                const data = await response.json();
-
-                if (response.ok) {
-                    alert('Company created successfully');
-                    // Handle successful response (e.g., redirect or reset form)
-                } else {
-                    alert(`Error: ${data.error}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
+
+                const data = await response.json();
+                document.getElementById('username').textContent = data.username;
+                document.getElementById('phone_number').textContent = data.phone_number;
+
+                loadingElement.style.display = 'none';
+                profileElement.style.display = 'block';
             } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred while creating the company.');
+                errorElement.textContent = error.message;
+                loadingElement.style.display = 'none';
             }
-        });
+        };
+
+        fetchProfile();
     });
 
     const handleLogout = () => {
@@ -167,4 +229,5 @@
         location.href = "/"
     };
 </script>
+
 </html>

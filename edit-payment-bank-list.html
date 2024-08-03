@@ -19,27 +19,14 @@
         </div>
 
         <div class="navbar_content">
-            <img src="./images/profile.jpg" alt="" class="profile" />
+            <a href="./profile.html"><img src="./images/profile.jpg" alt="" class="profile" /></a>
+            <button class="log-out-btn" onclick="handleLogout()"><i class='bx bx-log-out-circle'></i> Log Out</button>
         </div>
     </nav>
 
     <!-- sidebar -->
     <nav class="sidebar">
         <div class="menu_content">
-            <ul class="menu_items">
-                <!-- duplicate or remove this li tag if you want to add or remove navlink with submenu -->
-                <!-- start -->
-                <li class="item">
-                    <a href="./dashboard.html" class="nav_link">
-                        <span class="navlink_icon">
-                            <i class="bx bxs-dashboard"></i>
-                        </span>
-                        <span class="navlink">Dashboard</span>
-                    </a>
-                </li>
-                <!-- end -->
-            </ul>
-
             <ul class="menu_items">
                 <!-- duplicate these li tag if you want to add or remove navlink only -->
                 <!-- Start -->
@@ -130,12 +117,12 @@
     <section class="dashboard-main-box">
         <h2>Add Payment Method</h2>
         <form class="agent-form-big-box" id="bankDetailsForm" enctype="multipart/form-data">
-                <h3>Edit Bank Details</h3>
-                <input id="bankName" type="text" placeholder="Enter Bank Name" required>
-                <input id="accountName" type="text" placeholder="Enter Account Name" required>
-                <input id="bankAccountNumber" type="text" placeholder="Enter Account Number" required>
-                <input id="ifscCode" type="text" placeholder="Enter IFSC Code" required>
-                <input type="submit" value="Update">
+            <h3>Edit Bank Details</h3>
+            <input id="bankName" type="text" placeholder="Enter Bank Name" required>
+            <input id="accountName" type="text" placeholder="Enter Account Name" required>
+            <input id="bankAccountNumber" type="text" placeholder="Enter Account Number" required>
+            <input id="ifscCode" type="text" placeholder="Enter IFSC Code" required>
+            <input type="submit" value="Update">
         </form>
     </section>
     <!-- JavaScript -->
@@ -210,5 +197,10 @@
             fetchDetails();
         }
     });
+    const handleLogout = () => {
+        localStorage.clear()
+        location.href = "/"
+    };
 </script>
+
 </html>

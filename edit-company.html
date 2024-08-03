@@ -19,26 +19,14 @@
         </div>
 
         <div class="navbar_content">
-            <img src="./images/profile.jpg" alt="" class="profile" />
+            <a href="./profile.html"><img src="./images/profile.jpg" alt="" class="profile" /></a>
+            <button class="log-out-btn" onclick="handleLogout()"><i class='bx bx-log-out-circle'></i> Log Out</button>
         </div>
     </nav>
 
     <!-- sidebar -->
     <nav class="sidebar">
         <div class="menu_content">
-            <ul class="menu_items">
-                <!-- duplicate or remove this li tag if you want to add or remove navlink with submenu -->
-                <!-- start -->
-                <li class="item">
-                    <a href="./dashboard.html" class="nav_link">
-                        <span class="navlink_icon">
-                            <i class="bx bxs-dashboard"></i>
-                        </span>
-                        <span class="navlink">Dashboard</span>
-                    </a>
-                </li>
-                <!-- end -->
-            </ul>
 
             <ul class="menu_items">
                 <!-- duplicate these li tag if you want to add or remove navlink only -->
@@ -222,6 +210,11 @@
         form.addEventListener('submit', handleSubmit);
         fetchPropertyDetails(id);
     });
+
+    const handleLogout = () => {
+        localStorage.clear()
+        location.href = "/"
+    };
 </script>
 
 </html>
