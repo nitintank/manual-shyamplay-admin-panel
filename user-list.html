@@ -128,17 +128,18 @@
     <!-- Dashboard -->
 
     <section class="dashboard-main-box">
-        <h2>All Users</h2>
+        <div class="header-main-box">
+            <h2>All Users</h2>
+            <input type="text" id="searchInput" placeholder="Search by username or phone number">
+        </div>
         <p id="loading">Loading users...</p>
         <p id="error" style="display: none;"></p>
         <div class="table-big-box">
-            <p id="error" style="display:none;"></p>
             <table id="customers" style="display: none;">
                 <thead>
                     <tr>
                         <th>S No</th>
                         <th>Username</th>
-                        <th>Email</th>
                         <th>Phone Number</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -159,6 +160,9 @@
         const errorElement = document.getElementById('error');
         const userTable = document.getElementById('customers');
         const userTableBody = document.getElementById('userTableBody');
+        const searchInput = document.getElementById('searchInput');
+
+        let users = [];
 
         const fetchUsers = async () => {
             try {
@@ -172,7 +176,8 @@
                     throw new Error('Failed to fetch users');
                 }
                 const data = await response.json();
-                populateUsers(data);
+                users = data;
+                populateUsers(users);
             } catch (err) {
                 showError(err.message);
             } finally {
@@ -181,23 +186,27 @@
         };
 
         const populateUsers = (users) => {
+            userTableBody.innerHTML = '';
+            if (users.length === 0) {
+                showError('No users found for the search');
+                return;
+            }
             users.forEach((user, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${user.username}</td>
-                    <td>${user.email}</td>
-                    <td>${user.phone_number}</td>
-                    <td>${user.suspend_user ? 'Active' : 'Suspended'}</td>
-                    <td>
-                        <button 
-                            onclick="handleSuspendToggle('${user.username}', ${user.suspend_user})"
-                            class="toggleButton"
-                        >
-                            ${user.suspend_user ? 'Suspend' : 'Unsuspend'}
-                        </button>
-                    </td>
-                `;
+                <td>${index + 1}</td>
+                <td>${user.username}</td>
+                <td>${user.phone_number}</td>
+                <td>${user.suspend_user ? 'Active' : 'Suspended'}</td>
+                <td>
+                    <button 
+                        onclick="handleSuspendToggle('${user.username}', ${user.suspend_user})"
+                        class="toggleButton"
+                    >
+                        ${user.suspend_user ? 'Suspend' : 'Unsuspend'}
+                    </button>
+                </td>
+            `;
                 userTableBody.appendChild(row);
             });
             userTable.style.display = 'table';
@@ -222,15 +231,27 @@
                     throw new Error('Failed to update user status');
                 }
                 // Refresh the user list after status update
-                userTableBody.innerHTML = '';
                 fetchUsers();
             } catch (err) {
                 showError(err.message);
             }
         };
 
+        const filterUsers = (searchTerm) => {
+            const filteredUsers = users.filter(user =>
+                user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                user.phone_number.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            populateUsers(filteredUsers);
+        };
+
+        searchInput.addEventListener('input', (event) => {
+            filterUsers(event.target.value);
+        });
+
         fetchUsers();
     });
+
 </script>
 
 </html>

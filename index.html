@@ -14,8 +14,8 @@
         <form id="loginForm">
             <h2>Admin Login</h2>
             <div class="input-field">
-                <input type="text" id="identifier" name="identifier" required>
-                <label for="identifier">Enter Your Email</label>
+                <input type="text" id="phone_number" name="phone_number" required>
+                <label for="phone_number">Enter Your Email</label>
             </div>
             <div class="input-field">
                 <input type="password" id="password" name="password" required>
@@ -30,7 +30,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const loginForm = document.getElementById('loginForm');
-        const identifierInput = document.getElementById('identifier');
+        const phone_numberInput = document.getElementById('phone_number');
         const passwordInput = document.getElementById('password');
         const togglePassword = document.getElementById('togglePassword');
         const invalidLogin = document.getElementById('invalidLogin');
@@ -45,7 +45,7 @@
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const data = {
-                identifier: identifierInput.value,
+                phone_number: phone_numberInput.value,
                 password: passwordInput.value
             };
 
