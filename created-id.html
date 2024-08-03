@@ -146,19 +146,21 @@
                     </tr>
                 </thead>
                 <tbody id="userCreateIdTableBody">
-                    
+
                 </tbody>
             </table>
         </div>
 
-        <div class="popup-box" id="modal">
-            <i class='bx bx-x-circle popup-cross' id="closeModal"></i>
-            <h3>Enter Details</h3>
-            <form id="modalForm">
-                <input type="text" placeholder="Enter Username" id="username" name="username" required>
-                <input type="text" placeholder="Enter Password" id="password" name="password" required>
-                <button type="submit"><i class='bx bxs-badge-check'></i> Submit</button>
-            </form>
+        <div class="main-popup-box" id="modal">
+            <div class="popup-box">
+                <i class='bx bx-x-circle popup-cross' id="closeModal"></i>
+                <h3>Enter Details</h3>
+                <form id="modalForm">
+                    <input type="text" placeholder="Enter Username" id="username" name="username" required>
+                    <input type="text" placeholder="Enter Password" id="password" name="password" required>
+                    <button type="submit"><i class='bx bxs-badge-check'></i> Submit</button>
+                </form>
+            </div>
         </div>
     </section>
     <!-- JavaScript -->
@@ -251,7 +253,7 @@
             };
 
             const openModal = () => {
-                modal.style.display = 'block';
+                modal.style.display = 'flex';
             };
 
             const closeModalHandler = () => {

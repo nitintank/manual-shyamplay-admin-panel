@@ -402,16 +402,27 @@ body.dark {
 
 /* Popup Box CSS */
 
+.main-popup-box{
+    width: calc(100% - 260px);
+    margin-left: 260px;
+    height: calc(100vh - 65px);
+    margin-top: 65px;
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
 .popup-box{
     width: 350px;
     height: auto;
     background-color: var(--blue-color);
     padding: 15px;
     border-radius: 10px;
-    position: absolute;
-    top: 30%;
-    left: 35%;
-    display: none;
 }
 
 .popup-box h3{
