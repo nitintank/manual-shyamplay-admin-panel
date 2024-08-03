@@ -145,7 +145,7 @@
                     </tr>
                 </thead>
                 <tbody id="companyList">
-                    
+
                 </tbody>
             </table>
         </div>
@@ -159,6 +159,12 @@
     };
 
     const handleDeleteClick = async (companyId) => {
+        // Confirm deletion
+        const confirmDeletion = confirm('Are you sure you want to delete this company?');
+        if (!confirmDeletion) {
+            return; // If the user cancels, exit the function
+        }
+        
         try {
             const response = await fetch(`https://manual.shyamplay.in/company/${companyId}`, {
                 method: 'DELETE',
@@ -230,4 +236,5 @@
         fetchCompanies();
     });
 </script>
+
 </html>
