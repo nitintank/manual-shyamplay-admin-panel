@@ -132,8 +132,8 @@
         <div class="table-big-box">
             <div class="radio-input">
                 <label>
-                    <input onclick="updateViewType('withdraw')" value="withdraw" name="value-radio" id="withdrawalsButton"
-                        type="radio" checked>
+                    <input onclick="updateViewType('withdraw')" value="withdraw" name="value-radio"
+                        id="withdrawalsButton" type="radio" checked>
                     <span>Withdrawal</span>
                 </label>
                 <label>
@@ -157,6 +157,13 @@
             </table>
         </div>
     </section>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
     <!-- JavaScript -->
     <script src="./script.js"></script>
 </body>
@@ -165,8 +172,26 @@
     let viewType = 'withdraw';
 
     document.addEventListener('DOMContentLoaded', () => {
-        fetchTransactions();
-    });
+    fetchTransactions();
+
+    // Get the modal
+    const modal = document.getElementById('imageModal');
+
+    // Get the <span> element that closes the modal
+    const span = document.getElementsByClassName('close')[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() { 
+        modal.style.display = 'none';
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+});
 
     function updateViewType(type) {
         viewType = type;
@@ -218,6 +243,13 @@
         } catch (err) {
             alert(err.message);
         }
+    }
+
+    function openModal(imageUrl) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        modal.style.display = 'block';
+        modalImg.src = imageUrl;
     }
 
     function renderTransactions() {
@@ -285,7 +317,7 @@
                     ` : `
                         <td>${transaction.transaction_status}</td>
                         <td>${transaction.ifsc_code ? 'Bank' : 'UPI'}</td>
-                        <td>${transaction.payment_screenshort ? `<img src="https://manual.shyamplay.in/${transaction.payment_screenshort}" alt="payment screenshot" width="50" height="50"/>` : ''}</td>
+                        <td>${transaction.payment_screenshort ? `<img src="https://manual.shyamplay.in/${transaction.payment_screenshort}" alt="payment screenshot" width="50" height="50" onclick="openModal('https://manual.shyamplay.in/${transaction.payment_screenshort}')" />` : ''}</td>
                         <td>${transaction.upi_ref_number}</td>
                         <td><a href="https://${transaction.website_link}">${transaction.website_link}</a></td>
                         <td>
