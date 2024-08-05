@@ -86,7 +86,7 @@ body.dark {
     column-gap: 25px;
 }
 
-.navbar_content a{
+.navbar_content a {
     height: 35px;
 }
 
@@ -325,70 +325,282 @@ body.dark {
 }
 
 .dashboard-main-box h2 {
-    font-size: 25px;
+    font-size: 21px;
     line-height: 1;
 }
 
-/* Table Box CSS */
+/* Profile Details Card */
 
-.table-big-box {
-    width: 100%;
-    overflow-x: scroll;
+.create-user-card {
+    width: 30%;
+    height: auto;
+    background-color: rgba(182, 179, 38, 0.10);
+    border-radius: 15px;
+    border: 2px solid #B6B326;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
 }
 
-#customers {
-    border-collapse: collapse;
+.textbox {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+}
+
+.textbox label {
+    color: black;
+    font-size: 20px;
+}
+
+.textbox input {
+    width: 100%;
+    height: 50px;
+    border-radius: 50px;
+    border: none;
+    padding-left: 40px;
+}
+
+.textbox textarea {
+    width: 100%;
+    height: 100px;
+    border-radius: 10px;
+    border: none;
+    padding-left: 40px;
+}
+
+.textbox .icon {
+    height: 20px;
+    width: 20px;
+    margin-bottom: 0px;
+    position: absolute;
+    top: 50px;
+    left: 12px;
+}
+
+.textbox span {
+    color: black;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    top: 50%px;
+    right: 12px;
+}
+
+.textbox .icon2 {
+    height: 20px;
+    width: 20px;
+    margin-bottom: 0px;
+}
+
+.textbox .icon3 {
+    height: 15px;
+    width: 20px;
+    margin-bottom: 0px;
+    position: absolute;
+    top: 50%px;
+    right: 12px;
+}
+
+.textbox input::placeholder {
+    color: black;
+    font-size: 15px;
+}
+
+.login-button {
+    width: 100%;
+}
+
+.login-button button {
+    width: 100%;
+    padding: 15px;
+    background-color: #b5b326;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* User Search Card */
+
+.user-search {
+    width: 100%;
+    height: auto;
+    background-color: rgba(38, 84, 182, 0.1);
+    border-radius: 15px;
+    border: 2px solid #4070f4;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 10px;
+}
+
+.input-box {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+}
+
+.input-box label {
+    color: black;
+    font-size: 18px;
+}
+
+.input-box input {
+    width: 100%;
+    height: 40px;
+    border-radius: 50px;
+    border: none;
+    padding-left: 15px;
+}
+
+.input-box select {
+    width: 100%;
+    height: 40px;
+    border-radius: 50px;
+    border: none;
+    padding: 0px 15px;
+    background-image: url("/images/down-arrow.svg");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.input-box span {
+    color: black;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    top: 50%px;
+    right: 12px;
+}
+
+.input-box input::placeholder {
+    color: black;
+    font-size: 15px;
+}
+
+.load-btn {
+    width: 50%;
+    padding: 10px;
+    background-color: #4070f4;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 18px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+/* Transfer Card Section */
+
+.cards-box-flex{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.transfer-card-section {
     width: 100%;
     margin: 10px auto;
 }
 
-#customers td,
-#customers th {
-    border: 1px solid #ddd;
-    padding: 4px 8px;
+.transfer-card {
+    width: 32%;
+}
+
+.transfer-card-top {
+    width: 100%;
+    background-color: #4070f4;
+    padding: 5px 10px;
+    color: white;
+    border-radius: 10px 10px 0px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.transfer-card-top p {
+    text-transform: capitalize;
+    font-size: 18px;
+}
+
+.transfer-card-bottom {
+    width: 100%;
+    background-color: rgba(38, 84, 182, 0.1);
+    border: 1px solid #4070f4;
+    color: rgb(0, 0, 0);
+    padding: 10px;
+    border-radius: 0px 0px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+}
+
+.transfer-card-bottom p {
     font-size: 14px;
 }
 
-#customers tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-#customers tr:hover {
-    background-color: #ddd;
-}
-
-#customers th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: var(--blue-color);
-    color: white;
-}
-
-#customers td i {
-    font-size: 20px;
-    color: black;
-    cursor: pointer;
-}
-
-#customers td img{
-    width: 40px;
-    height: 40px;
-    border-radius: 5px;
-}
-
-.company-logo-img {
-    width: 35px;
-    height: 35px;
-    margin: auto;
-    display: block;
-}
-
-.action-box {
-    width: 100%;
+.transfer-card-top-status {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.transfer-card-top-status img {
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    padding: 4px;
+    border-radius: 5px;
+}
+
+.transfer-card-top-status p {
+    background-color: #ffffff;
+    color: black;
+    font-size: 14px;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+
+.transfer-card-top-status .approve-btn{
+    background-color: #4cb543;
+    color: white;
+}
+
+.transfer-card-top-status .rejected-btn{
+    background-color: red;
+    color: white;
+}
+
+.amount-status {
+    font-size: 25px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 /* Radio Button */
@@ -470,6 +682,81 @@ body.dark {
     border-radius: 5px;
 }
 
+.pay-shot-img{
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+}
+
+.pay-shot-img img{
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Responsive Code */
+
+@media (max-width:1300px) {
+    .cards-box-flex{
+        gap: 10px;
+    }
+}
+
+@media (max-width:1200px) {
+    .create-user-card {
+        width: 45%;
+    }
+
+    .user-search {
+        width: 95%;
+    }
+
+    .amount-status {
+        font-size: 22px;
+    }
+}
+
+@media (max-width:1024px) {
+    .transfer-card {
+        width: 48%;
+    }
+}
+
+@media (max-width:769px) {
+    .create-user-card {
+        width: 95%;
+    }
+
+    .create-user-image img {
+        width: 50%;
+    }
+
+    .user-search {
+        width: 95%;
+        flex-direction: column;
+    }
+
+    .transfer-card {
+        width: 48%;
+    }
+
+    .load-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 500px) {
+    .transfer-card {
+        width: 95%;
+        margin: auto;
+    }
+
+    .amount-status {
+        font-size: 20px;
+    }
+}
+
 /* Responsive Code */
 
 @media (max-width: 769px) {
@@ -482,23 +769,10 @@ body.dark {
     }
 
     .dashboard-main-box h2 {
-        font-size: 25px;
+        font-size: 21px;
         text-align: center;
     }
-
-    /* Table CSS Code */
-    #customers th {
-        white-space: nowrap;
-        font-size: 14px;
-    }
-
-    #customers td,
-    #customers th {
-        padding: 5px;
-        font-size: 14px;
-    }
 }
-
 
 /* The Modal (background) */
 .modal {
@@ -585,6 +859,7 @@ body.dark {
     }
 }
 
+
 .log-out-btn {
     background-color: #4070f4;
     color: white;
@@ -598,8 +873,112 @@ body.dark {
     align-items: center;
     justify-content: center;
     gap: 5px;
-  }
-  
-  .log-out-btn i{
+}
+
+.log-out-btn i {
     color: white;
-  }
+}
+
+/* Popup Modal CSS */
+
+.main-popup-box {
+    width: calc(100% - 260px);
+    margin-left: 260px;
+    height: calc(100vh - 65px);
+    margin-top: 65px;
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.9);
+    /* Black w/ opacity */
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.popup-box {
+    width: 350px;
+    height: auto;
+    background-color: var(--blue-color);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.popup-box h3 {
+    font-size: 21px;
+    color: white;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.popup-box .form-pop-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.popup-box .form-pop-box textarea {
+    width: 100%;
+    border-radius: 5px;
+    padding: 5px 10px;
+    border: none;
+    font-size: 14px;
+}
+
+.popup-btn-box-css{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.popup-box .form-pop-box .green-btn {
+    background-color: white;
+    color: rgb(101, 101, 101);
+    border: 2px solid green;
+    color: green;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    width: 49%;
+    border-radius: 5px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.popup-box .form-pop-box .red-btn {
+    background-color: white;
+    color: rgb(101, 101, 101);
+    border: 2px solid red;
+    color: red;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    width: 49%;
+    border-radius: 5px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.popup-box .form-pop-box button i {
+    font-size: 20px;
+}
+
+.popup-cross {
+    font-size: 35px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+}

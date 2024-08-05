@@ -125,8 +125,9 @@
                         <th>S No.</th>
                         <th>Company Name</th>
                         <th>Website Link</th>
-                        <th>Name</th>
+                        <th>UserName</th>
                         <th>Amount</th>
+                        <th>Payment Details</th>
                         <th>Payment Status</th>
                         <th>Status</th>
                         <th>Update Payment</th>
@@ -150,6 +151,13 @@
             </div>
         </div>
     </section>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
     <!-- JavaScript -->
     <script src="./script.js"></script>
     <script>
@@ -163,6 +171,19 @@
             const modalForm = document.getElementById('modalForm');
             let currentCreditId = null;
             let originalPaymentStatus = null;  // Track the original payment status
+            // Image modal functionality
+            const imageModal = document.getElementById('imageModal');
+            const imageSpan = document.getElementsByClassName('close')[0];
+
+            imageSpan.onclick = function () {
+                imageModal.style.display = 'none';
+            }
+
+            window.onclick = function (event) {
+                if (event.target == imageModal) {
+                    imageModal.style.display = 'none';
+                }
+            }
 
             const fetchUsers = async () => {
                 try {
@@ -193,6 +214,10 @@
                 <td>${user.website_link}</td>
                 <td>${user.name}</td>
                 <td>${user.amount}</td>
+                <td>${user.payment_screenshort ? `<img src="https://manual.shyamplay.in/${user.payment_screenshort}" alt="payment screenshot" width="25" height="25" onclick="openModalz('https://manual.shyamplay.in/${user.payment_screenshort}')" />` : 'No Image'}
+                    <p><strong>Created At:</strong> ${user.created_at}</p>
+                    <p><strong>UTR:</strong> ${user.upi_ref_number}</p>
+                </td>
                 <td class="payment-status">${user.payment_status}</td>
                 <td class="status">${user.status}</td>
                 <td>
@@ -306,6 +331,13 @@
             localStorage.clear()
             location.href = "/"
         };
+
+        function openModalz(imageUrl) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.style.display = 'block';
+            modalImg.src = imageUrl;
+        }
     </script>
 </body>
 

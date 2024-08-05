@@ -15,7 +15,7 @@
     <nav class="navbar">
         <div class="logo_item">
             <i class="bx bx-menu" id="sidebarOpen"></i>
-            <img src="./images/logo.png" alt=""></i>
+            <img src="./images/logo.png" alt="">
         </div>
 
         <div class="navbar_content">
@@ -28,8 +28,6 @@
     <nav class="sidebar">
         <div class="menu_content">
             <ul class="menu_items">
-                <!-- duplicate these li tag if you want to add or remove navlink only -->
-                <!-- Start -->
                 <li class="item">
                     <a href="./add-company.html" class="nav_link">
                         <span class="navlink_icon">
@@ -38,7 +36,6 @@
                         <span class="navlink">Add Company</span>
                     </a>
                 </li>
-
                 <li class="item">
                     <a href="./all-company-list.html" class="nav_link">
                         <span class="navlink_icon">
@@ -47,7 +44,6 @@
                         <span class="navlink">All Company List</span>
                     </a>
                 </li>
-
                 <li class="item">
                     <a href="./user-list.html" class="nav_link">
                         <span class="navlink_icon">
@@ -113,35 +109,51 @@
     </nav>
 
     <!-- Dashboard -->
-
     <section class="dashboard-main-box">
-        <h2>D/W Requests</h2>
-        <div class="table-big-box">
-            <div class="radio-input">
-                <label>
-                    <input onclick="updateViewType('withdraw')" value="withdraw" name="value-radio"
-                        id="withdrawalsButton" type="radio" checked>
-                    <span>Withdrawal</span>
-                </label>
-                <label>
-                    <input onclick="updateViewType('deposit')" value="deposit" name="value-radio" id="depositsButton"
-                        type="radio">
-                    <span>Deposit</span>
-                </label>
-                <span class="selection"></span>
+        <h2 class="page-heading">Deposit Withdrawal Request</h2>
+
+        <div class="radio-input">
+            <label>
+                <input onclick="updateViewType('withdraw')" value="withdraw" name="value-radio" id="withdrawalsButton"
+                    type="radio" checked>
+                <span>Withdrawal</span>
+            </label>
+            <label>
+                <input onclick="updateViewType('deposit')" value="deposit" name="value-radio" id="depositsButton"
+                    type="radio">
+                <span>Deposit</span>
+            </label>
+            <span class="selection"></span>
+        </div>
+
+        <div class="user-search">
+            <div class="input-box">
+                <label for="searchUser">Search User</label>
+                <input type="text" id="searchUser" placeholder="Enter Username" />
             </div>
+            <div class="input-box">
+                <label for="selectStatus">Select Status</label>
+                <select name="" id="selectStatus">
+                    <option value="all">All</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+            </div>
+            <!-- <div class="input-box">
+                <label for="selectDateRange">Select Date Range</label>
+                <input type="text" id="selectDateRange" name="daterange" value="01/01/2023 - 01/15/2023" />
+            </div> -->
+            <button class="load-btn" onclick="filterTransactions()">Load</button>
+        </div>
+        
+
+        <!-- Deposit Withdrawal Request -->
+        <div class="transfer-card-section">
             <p id="loadingText">Loading transactions...</p>
             <p id="errorText" style="display: none;"></p>
-            <table id="customers" style="display: none;">
-                <thead>
-                    <tr id="tableHeader">
-
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-
-                </tbody>
-            </table>
+            <div class="cards-box-flex" id="transactionsContainer" style="display: none;">
+            </div>
         </div>
     </section>
 
@@ -151,34 +163,138 @@
         <img class="modal-content" id="modalImage">
     </div>
 
+    <!-- Description Modal -->
+    <div class="main-popup-box" id="descriptionModal">
+        <div class="popup-box">
+            <i class='bx bx-x-circle popup-cross' onclick="handleCloseDescriptionModal()"></i>
+            <h3>Provide Description</h3>
+            <div class="form-pop-box">
+                <textarea id="description" placeholder="Enter description"></textarea>
+                <div class="popup-btn-box-css">
+                    <button onclick="handleUpdateTransactionWithDescription()" class="green-btn"> <i class='bx bxs-badge-check'></i>Submit</button>
+                    <button onclick="handleCloseDescriptionModal()" class="red-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script src="./script.js"></script>
 </body>
 <script>
     let transactions = [];
     let viewType = 'withdraw';
+    let currentTransaction = null;
+    let newStatus = '';
+    let description = '';
 
     document.addEventListener('DOMContentLoaded', () => {
         fetchTransactions();
 
-        // Get the modal
-        const modal = document.getElementById('imageModal');
+        const searchUserInput = document.getElementById('searchUser');
+    const selectStatusInput = document.getElementById('selectStatus');
 
-        // Get the <span> element that closes the modal
-        const span = document.getElementsByClassName('close')[0];
+    searchUserInput.addEventListener('input', filterTransactions);
+    selectStatusInput.addEventListener('change', filterTransactions);
 
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function () {
-            modal.style.display = 'none';
+        // Image modal functionality
+        const imageModal = document.getElementById('imageModal');
+        const imageSpan = document.getElementsByClassName('close')[0];
+
+        imageSpan.onclick = function () {
+            imageModal.style.display = 'none';
         }
 
-        // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
+            if (event.target == imageModal) {
+                imageModal.style.display = 'none';
             }
         }
+        
     });
+
+    function filterTransactions() {
+    const searchUser = document.getElementById('searchUser').value.toLowerCase();
+    const selectStatus = document.getElementById('selectStatus').value;
+    const filteredTransactions = transactions.filter(transaction => {
+        const usernameMatch = transaction.user_name.toLowerCase().includes(searchUser);
+        const statusMatch = selectStatus === 'all' || 
+                            (viewType === 'withdraw' && transaction.withdraw_status === selectStatus) ||
+                            (viewType === 'deposit' && transaction.transaction_status === selectStatus);
+        return usernameMatch && statusMatch;
+    });
+    renderFilteredTransactions(filteredTransactions);
+}
+
+function renderFilteredTransactions(filteredTransactions) {
+    const transactionsContainer = document.getElementById('transactionsContainer');
+    const loadingText = document.getElementById('loadingText');
+    const errorText = document.getElementById('errorText');
+
+    loadingText.style.display = 'none';
+    errorText.style.display = 'none';
+    transactionsContainer.style.display = 'flex';
+    transactionsContainer.innerHTML = '';
+
+    filteredTransactions.forEach(transaction => {
+        const transactionDiv = document.createElement('div');
+        transactionDiv.classList.add('transfer-card');
+
+        if (viewType === 'withdraw') {
+            transactionDiv.innerHTML = `
+            <div class="transfer-card-top">
+                <p>${transaction.transaction_type}</p>
+                <div class="transfer-card-top-status">
+                    <p class="${transaction.withdraw_status === 'approved' ? 'approve-btn' : transaction.withdraw_status === 'rejected' ? 'rejected-btn' : ''}">${transaction.withdraw_status}</p>
+                </div>
+            </div>
+            <div class="transfer-card-bottom">
+                <p><strong>Username:</strong> ${transaction.user_name}</p>
+                <p><strong>Website Link:</strong> <a href="https://${transaction.website_link}">${transaction.website_link}</a></p>
+                <p><strong>Payment Method:</strong> ${transaction.ifsc_code ? 'Bank' : 'UPI'}</p>
+                <p><strong>Created At:</strong> ${transaction.created_at}</p>
+                <p><strong>IFSC Code:</strong> ${transaction.ifsc_code}</p>
+                <p><strong>Account Number / UPI ID:</strong> ${transaction.account_number ? transaction.account_number : transaction.upi_id}</p>
+                <p><strong>Account Name:</strong> ${transaction.account_name}</p>
+                <p><strong>QR Code:</strong> ${transaction.qr_code ? `<img src="https://manual.shyamplay.in/${transaction.qr_code}" alt="QR code" width="50" height="50" />` : 'No QR Code'}</p>
+                ${transaction.description ? `<p><strong>Description:</strong> ${transaction.description}</p>` : `
+                <div class="action-box">
+                    <button class="completed-btn" onclick="handleOpenDescriptionModal(${transaction.id}, 'approved')">Approve</button>
+                    <button class="reject-btn" onclick="handleOpenDescriptionModal(${transaction.id}, 'rejected')">Reject</button>
+                </div>`}
+                
+                <h2 class="amount-status">${transaction.amount}</h2>
+            </div>
+            `;
+        } else {
+            transactionDiv.innerHTML = `
+            <div class="transfer-card-top">
+                <p>${transaction.transaction_type}</p>
+                <div class="transfer-card-top-status">
+                    <p class="${transaction.transaction_status === 'approved' ? 'approve-btn' : transaction.transaction_status === 'rejected' ? 'rejected-btn' : ''}">${transaction.transaction_status}</p>
+                </div>
+            </div>
+            <div class="transfer-card-bottom">
+                <p><strong>Username:</strong> ${transaction.user_name}</p>
+                <p><strong>Payment Method:</strong> ${transaction.ifsc_code ? 'Bank' : 'UPI'}</p>
+                <p class="pay-shot-img">${transaction.payment_screenshort ? `<img src="https://manual.shyamplay.in/${transaction.payment_screenshort}" alt="payment screenshot" width="50" height="50" onclick="openModal('https://manual.shyamplay.in/${transaction.payment_screenshort}')" />` : ''}</p>
+                <p><strong>Created At:</strong> ${transaction.created_at}</p>
+                <p><strong>UPI Ref Number:</strong> ${transaction.upi_ref_number}</p>
+                <p><strong>Website Link:</strong> <a href="https://${transaction.website_link}">${transaction.website_link}</a></p>
+                ${transaction.description ? `<p><strong>Description:</strong> ${transaction.description}</p>` : `
+                <div class="action-box">
+                    <button class="completed-btn" onclick="handleOpenDescriptionModal(${transaction.id}, 'approved')">Approve</button>
+                    <button class="reject-btn" onclick="handleOpenDescriptionModal(${transaction.id}, 'rejected')">Reject</button>
+                </div>`}
+                
+                <h2 class="amount-status">${transaction.amount}</h2>
+            </div>
+            `;
+        }
+
+        transactionsContainer.appendChild(transactionDiv);
+    });
+}
 
     function updateViewType(type) {
         viewType = type;
@@ -206,16 +322,38 @@
         }
     }
 
-    async function handleUpdateTransaction(transactionId, newStatus, type) {
+    function handleOpenDescriptionModal(transactionId, status) {
+        currentTransaction = transactions.find(transaction => transaction.id === transactionId);
+        newStatus = status;
+        description = '';
+        document.getElementById('description').value = '';
+        const modal = document.getElementById('descriptionModal');
+        modal.style.display = 'flex';
+    }
+
+    function handleCloseDescriptionModal() {
+        const modal = document.getElementById('descriptionModal');
+        modal.style.display = 'none';
+        currentTransaction = null;
+        newStatus = '';
+        description = '';
+    }
+
+    async function handleUpdateTransactionWithDescription() {
+        if (!currentTransaction) {
+            alert('No transaction selected');
+            return;
+        }
         try {
-            const response = await fetch(`https://manual.shyamplay.in/admin/transaction/${transactionId}/update-${type}`, {
+            const response = await fetch(`https://manual.shyamplay.in/admin/transaction/${currentTransaction.id}/update-${viewType}`, {
                 method: 'PATCH',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    [type === 'deposit' ? 'transaction_status' : 'withdraw_status']: newStatus
+                    [viewType === 'deposit' ? 'transaction_status' : 'withdraw_status']: newStatus,
+                    description: document.getElementById('description').value
                 })
             });
             if (!response.ok) {
@@ -224,9 +362,10 @@
             const data = await response.json();
             alert(data.message);
             transactions = transactions.map(transaction =>
-                transaction.id === transactionId ? { ...transaction, [type === 'deposit' ? 'transaction_status' : 'withdraw_status']: newStatus } : transaction
+                transaction.id === currentTransaction.id ? { ...transaction, [viewType === 'deposit' ? 'transaction_status' : 'withdraw_status']: newStatus } : transaction
             );
             renderTransactions();
+            handleCloseDescriptionModal();
         } catch (err) {
             alert(err.message);
         }
@@ -241,83 +380,75 @@
 
     function renderTransactions() {
         const filteredTransactions = transactions.filter(transaction => transaction.transaction_type === viewType);
-        const tableHeader = document.getElementById('tableHeader');
-        const tableBody = document.getElementById('tableBody');
+        const transactionsContainer = document.getElementById('transactionsContainer');
         const loadingText = document.getElementById('loadingText');
         const errorText = document.getElementById('errorText');
-        const propertyList = document.getElementById('customers');
 
         loadingText.style.display = 'none';
         errorText.style.display = 'none';
-        propertyList.style.display = 'table';
-
-        tableHeader.innerHTML = '';
-        tableBody.innerHTML = '';
-
-        if (viewType === 'withdraw') {
-            tableHeader.innerHTML = `
-                    <th>S No</th>
-                    <th>Amount</th>
-                    <th>Website Link</th>
-                    <th>Transaction Type</th>
-                    <th>Withdraw Status</th>
-                    <th>Payment Method</th>
-                    <th>IFSC Code</th>
-                    <th>Account Number / UPI ID</th>
-                    <th>Account Name</th>
-                    <th>QR Code</th>
-                    <th>Actions</th>
-                `;
-        } else {
-            tableHeader.innerHTML = `
-                    <th>S No</th>
-                    <th>Amount</th>
-                    <th>Transaction Status</th>
-                    <th>Payment Method</th>
-                    <th>Payment Screenshot</th>
-                    <th>UPI Ref Number</th>
-                    <th>Website Link</th>
-                    <th>Actions</th>
-                `;
-        }
+        transactionsContainer.style.display = 'flex';
+        transactionsContainer.innerHTML = '';
 
         filteredTransactions.forEach((transaction, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${transaction.amount}</td>
-                    ${viewType === 'withdraw' ? `
-                        <td><a href="https://${transaction.website_link}">${transaction.website_link}</a></td>
-                        <td>${transaction.transaction_type}</td>
-                        <td>${transaction.withdraw_status}</td>
-                        <td>${transaction.ifsc_code ? 'Bank' : 'UPI'}</td>
-                        <td>${transaction.ifsc_code}</td>
-                        <td>${transaction.account_number ? transaction.account_number : transaction.upi_id}</td>
-                        <td>${transaction.account_name}</td>
-                        <td>${transaction.qr_code ? `<img src="https://manual.shyamplay.in/${transaction.qr_code}" alt="QR code" width="50" height="50" />` : 'No QR Code'}</td>
-                        <td>
-                            <div class="action-box">
-                            <button class="completed-btn" onclick="handleUpdateTransaction('${transaction.id}', 'approved', 'withdraw')">Approve</button>
-                            <button class="reject-btn" onclick="handleUpdateTransaction('${transaction.id}', 'rejected', 'withdraw')">Reject</button>
-                            </div>
-                        </td>
-                    ` : `
-                        <td>${transaction.transaction_status}</td>
-                        <td>${transaction.ifsc_code ? 'Bank' : 'UPI'}</td>
-                        <td>${transaction.payment_screenshort ? `<img src="https://manual.shyamplay.in/${transaction.payment_screenshort}" alt="payment screenshot" width="50" height="50" onclick="openModal('https://manual.shyamplay.in/${transaction.payment_screenshort}')" />` : ''}</td>
-                        <td>${transaction.upi_ref_number}</td>
-                        <td><a href="https://${transaction.website_link}">${transaction.website_link}</a></td>
-                        <td>
-                            <div class="action-box">
-                            <button class="completed-btn" onclick="handleUpdateTransaction('${transaction.id}', 'approved', 'deposit')">Approve</button>
-                            <button class="reject-btn" onclick="handleUpdateTransaction('${transaction.id}', 'rejected', 'deposit')">Reject</button>
-                             </div>
-                        </td>
-                    `}
+            const transactionDiv = document.createElement('div');
+            transactionDiv.classList.add('transfer-card');
+
+            if (viewType === 'withdraw') {
+                transactionDiv.innerHTML = `
+                <div class="transfer-card-top">
+                    <p>${transaction.transaction_type}</p>
+                    <div class="transfer-card-top-status">
+                        <p class="${transaction.withdraw_status === 'approved' ? 'approve-btn' : transaction.withdraw_status === 'rejected' ? 'rejected-btn' : ''}">${transaction.withdraw_status}</p>
+                    </div>
+                </div>
+                <div class="transfer-card-bottom">
+                    <p><strong>Username:</strong> ${transaction.user_name}</p>
+                    <p><strong>Website Link:</strong> <a href="https://${transaction.website_link}">${transaction.website_link}</a></p>
+                    <p><strong>Payment Method:</strong> ${transaction.ifsc_code ? 'Bank' : 'UPI'}</p>
+                    <p><strong>Created At:</strong> ${transaction.created_at}</p>
+                    <p><strong>IFSC Code:</strong> ${transaction.ifsc_code}</p>
+                    <p><strong>Account Number / UPI ID:</strong> ${transaction.account_number ? transaction.account_number : transaction.upi_id}</p>
+                    <p><strong>Account Name:</strong> ${transaction.account_name}</p>
+                    <p><strong>QR Code:</strong> ${transaction.qr_code ? `<img src="https://manual.shyamplay.in/${transaction.qr_code}" alt="QR code" width="50" height="50" />` : 'No QR Code'}</p>
+                    ${transaction.description ? `<p><strong>Description:</strong> ${transaction.description}</p>` : `
+                    <div class="action-box">
+                        <button class="completed-btn" onclick="handleOpenDescriptionModal(${transaction.id}, 'approved')">Approve</button>
+                        <button class="reject-btn" onclick="handleOpenDescriptionModal(${transaction.id}, 'rejected')">Reject</button>
+                    </div>`}
+                    
+                    <h2 class="amount-status">${transaction.amount}</h2>
+                </div>
                 `;
-            tableBody.appendChild(row);
+            } else {
+                transactionDiv.innerHTML = `
+                <div class="transfer-card-top">
+                    <p>${transaction.transaction_type}</p>
+                    <div class="transfer-card-top-status">
+                        <p class="${transaction.transaction_status === 'approved' ? 'approve-btn' : transaction.transaction_status === 'rejected' ? 'rejected-btn' : ''}">${transaction.transaction_status}</p>
+                    </div>
+                </div>
+                <div class="transfer-card-bottom">
+                    <p><strong>Username:</strong> ${transaction.user_name}</p>
+                    <p><strong>Payment Method:</strong> ${transaction.ifsc_code ? 'Bank' : 'UPI'}</p>
+                    <p class="pay-shot-img">${transaction.payment_screenshort ? `<img src="https://manual.shyamplay.in/${transaction.payment_screenshort}" alt="payment screenshot" width="50" height="50" onclick="openModal('https://manual.shyamplay.in/${transaction.payment_screenshort}')" />` : ''}</p>
+                    <p><strong>Created At:</strong> ${transaction.created_at}</p>
+                    <p><strong>UPI Ref Number:</strong> ${transaction.upi_ref_number}</p>
+                    <p><strong>Website Link:</strong> <a href="https://${transaction.website_link}">${transaction.website_link}</a></p>
+                    ${transaction.description ? `<p><strong>Description:</strong> ${transaction.description}</p>` : `
+                    <div class="action-box">
+                        <button class="completed-btn" onclick="handleOpenDescriptionModal(${transaction.id}, 'approved')">Approve</button>
+                        <button class="reject-btn" onclick="handleOpenDescriptionModal(${transaction.id}, 'rejected')">Reject</button>
+                    </div>`}
+                    
+                    <h2 class="amount-status">${transaction.amount}</h2>
+                </div>
+                `;
+            }
+
+            transactionsContainer.appendChild(transactionDiv);
         });
     }
+
     const handleLogout = () => {
         localStorage.clear()
         location.href = "/"
