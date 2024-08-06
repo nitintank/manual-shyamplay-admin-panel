@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <title>Transaction History - Shyam Play Manual</title>
+    <link rel="stylesheet" href="./transaction-history.css" />
+</head>
+
+<body>
+    <!-- navbar -->
+    <nav class="navbar">
+        <div class="logo_item">
+            <i class="bx bx-menu" id="sidebarOpen"></i>
+            <img src="./images/logo.png" alt="">
+        </div>
+
+        <div class="navbar_content">
+            <a href="./profile.html"><img src="./images/profile.jpg" alt="" class="profile" /></a>
+            <button class="log-out-btn" onclick="handleLogout()"><i class='bx bx-log-out-circle'></i> Log Out</button>
+        </div>
+    </nav>
+
+    <!-- sidebar -->
+    <nav class="sidebar">
+        <div class="menu_content">
+            <ul class="menu_items">
+                <li class="item">
+                    <a href="./add-company.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bx-building-house'></i>
+                        </span>
+                        <span class="navlink">Add Company</span>
+                    </a>
+                </li>
+
+                <li class="item">
+                    <a href="./all-company-list.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-user-pin'></i>
+                        </span>
+                        <span class="navlink">All Company List</span>
+                    </a>
+                </li>
+
+                <li class="item">
+                    <a href="./user-list.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-star'></i>
+                        </span>
+                        <span class="navlink">User List</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./created-id.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bx-list-ol'></i>
+                        </span>
+                        <span class="navlink">Created ID</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./add-payment.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-info-circle'></i>
+                        </span>
+                        <span class="navlink">Add Payment</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./payment-list.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-book-content'></i>
+                        </span>
+                        <span class="navlink">Payment List</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./deposit-withdrawal-request.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bx-money-withdraw'></i>
+                        </span>
+                        <span class="navlink">D/W Requests</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./password-request.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bxs-key'></i>
+                        </span>
+                        <span class="navlink">Password Requests</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="./transaction-history.html" class="nav_link">
+                        <span class="navlink_icon">
+                            <i class='bx bx-transfer-alt'></i>
+                        </span>
+                        <span class="navlink">Transaction History</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Sidebar Open / Close -->
+            <div class="bottom_content">
+                <div class="bottom expand_sidebar">
+                    <span> Expand</span>
+                    <i class='bx bx-log-in'></i>
+                </div>
+                <div class="bottom collapse_sidebar">
+                    <span> Collapse</span>
+                    <i class='bx bx-log-out'></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard -->
+
+    <section class="dashboard-main-box">
+        <div class="top-data-box">
+            <h2>Transaction History</h2>
+            <div class="search-filter-box">
+                <input type="text" id="user_name_search" placeholder="Enter Username">
+                <select name="" id="transactionType">
+                    <option value="all">All</option>
+                    <option value="credit">Site ID</option>
+                    <option value="deposit">Deposit</option>
+                    <option value="withdraw">Withdraw</option>
+                    <option value="password_change">Password Change</option>
+                </select>
+            </div>
+        </div>
+        <div id="error" class="whiteText"></div>
+        <div class="credit-cards-big-box" id="transactionList">
+
+        </div>
+    </section>
+    <!-- JavaScript -->
+    <script src="./script.js"></script>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const transactionTypeSelect = document.getElementById('transactionType');
+        const transactionList = document.getElementById('transactionList');
+        const errorDiv = document.getElementById('error');
+        const userNameSearch = document.getElementById('user_name_search');
+
+        let allTransactions = [];
+
+        const fetchTransactionHistory = async (transactionType) => {
+            const types = transactionType === 'all' ? ['credit', 'deposit', 'withdraw', 'password_change'] : [transactionType];
+            const fetchedTransactions = [];
+            const errorMessages = [];
+
+            const fetchData = async (type) => {
+                try {
+                    const response = await fetch(`https://manual.shyamplay.in/admin/transaction/history?type=${type}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                        },
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Error fetching ${type} data: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (data.message) {
+                        errorMessages.push(`No ${type} records found`);
+                    } else {
+                        fetchedTransactions.push(...data);
+                    }
+                } catch (error) {
+                    errorMessages.push(`Failed to fetch ${type} data: ${error.message}`);
+                }
+            };
+
+            await Promise.all(types.map(type => fetchData(type)));
+
+            if (fetchedTransactions.length === 0 && errorMessages.length > 0) {
+                errorDiv.textContent = errorMessages.join(' | ');
+            } else {
+                errorDiv.textContent = '';
+                fetchedTransactions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                allTransactions = fetchedTransactions;
+                renderTransactions(allTransactions);
+            }
+        };
+
+        const getStatusClassName = (status) => {
+            switch (status) {
+                case 'approved':
+                    return 'approved_btn';
+                case 'rejected':
+                    return 'rejected_btn';
+                default:
+                    return 'pending_btn';
+            }
+        };
+
+        const renderTransactions = (transactions) => {
+            transactionList.innerHTML = '';
+            if (transactions.length === 0) {
+                transactionList.innerHTML = '<div class="whiteText">No Transaction History Found!</div>';
+                return;
+            }
+
+            transactions.forEach(transaction => {
+                const div = document.createElement('div');
+                div.className = 'credit-cards-box';
+
+                div.innerHTML = `
+                <div class="id_inner_box_1">
+                    <p><strong>User Name:</strong> ${transaction.username}</p>
+                    ${transaction.credit_name ? `<p><strong>Credit Name:</strong> ${transaction.credit_name}</p>` : ''}
+                    <p><strong>Company Name:</strong> ${transaction.company_name}</p>
+                    <p><strong>Website Link:</strong> <a href="https://${transaction.website_link}" target="_blank">${transaction.website_link}</a></p>
+                    ${transaction.amount ? `<p><strong>Amount:</strong> ${transaction.amount}</p>` : ''}
+                    ${transaction.transaction_type ? `<p><strong>Transaction Type:</strong> ${transaction.transaction_type}</p>` : ''}
+                    ${transaction.created_at ? `<p><strong>Created At:</strong> ${transaction.created_at}</p>` : ''}
+                    <button class="${getStatusClassName(transaction.status)}">${transaction.status}</button>
+                </div>
+            `;
+
+                transactionList.appendChild(div);
+            });
+        };
+
+        const handleTransactionTypeChange = (e) => {
+            fetchTransactionHistory(e.target.value);
+        };
+
+        const handleUserNameSearch = (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredTransactions = allTransactions.filter(transaction => transaction.username.toLowerCase().includes(searchTerm));
+            renderTransactions(filteredTransactions);
+        };
+
+        transactionTypeSelect.addEventListener('change', handleTransactionTypeChange);
+        userNameSearch.addEventListener('input', handleUserNameSearch);
+
+        fetchTransactionHistory('all');
+    });
+
+    const handleLogout = () => {
+        localStorage.clear()
+        location.href = "/"
+    };
+</script>
+
+</html>
