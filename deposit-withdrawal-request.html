@@ -264,7 +264,7 @@ function renderFilteredTransactions(filteredTransactions) {
                 <p><strong>IFSC Code:</strong> ${transaction.ifsc_code}</p>
                 <p><strong>Account Number / UPI ID:</strong> ${transaction.account_number ? transaction.account_number : transaction.upi_id}</p>
                 <p><strong>Account Name:</strong> ${transaction.account_name}</p>
-                <p><strong>QR Code:</strong> ${transaction.qr_code ? `<img src="https://manual.shyamplay.in/${transaction.qr_code}" alt="QR code" width="50" height="50" />` : 'No QR Code'}</p>
+                <p>${transaction.qr_code_image ? `<img src="https://manual.shyamplay.in/${transaction.qr_code_image}" alt="QR code" onclick="openModal('https://manual.shyamplay.in/${transaction.qr_code_image}')" width="50" height="50" />` : ''}</p>
                 ${transaction.description ? `<p><strong>Description:</strong> ${transaction.description}</p>` : `
                 <div class="action-box">
                     <button class="completed-btn" onclick="handleOpenDescriptionModal(${transaction.id}, 'approved')">Approve</button>
@@ -417,7 +417,7 @@ function renderFilteredTransactions(filteredTransactions) {
                     <p><strong>IFSC Code:</strong> ${transaction.ifsc_code}</p>
                     <p><strong>Account Number / UPI ID:</strong> ${transaction.account_number ? transaction.account_number : transaction.upi_id}</p>
                     <p><strong>Account Name:</strong> ${transaction.account_name}</p>
-                    <p><strong>QR Code:</strong> ${transaction.qr_code ? `<img src="https://manual.shyamplay.in/${transaction.qr_code}" alt="QR code" width="50" height="50" />` : 'No QR Code'}</p>
+                    <p class="pay-shot-img">${transaction.qr_code_image ? `<img src="https://manual.shyamplay.in/${transaction.qr_code_image}" alt="QR code" onclick="openModal('https://manual.shyamplay.in/${transaction.qr_code_image}')" width="50" height="50" />` : ''}</p>
                     ${transaction.description ? `<p><strong>Description:</strong> ${transaction.description}</p>` : `
                     <div class="action-box">
                         <button class="completed-btn" onclick="handleOpenDescriptionModal(${transaction.id}, 'approved')">Approve</button>
