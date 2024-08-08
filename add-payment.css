@@ -375,7 +375,12 @@ body.dark {
 }
 
 .agent-form-big-box h3{
-  font-size: 20px;
+  font-size: 18px;
+}
+
+.agent-form-big-box label{
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* Radio Button */

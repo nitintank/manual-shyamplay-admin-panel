@@ -219,6 +219,7 @@
             } else {
                 headersHTML = `
                 <th>S No</th>
+                <th>UPI Name</th>
                 <th>UPI ID</th>
                 <th>QR Code</th>
                 <th>Action</th>
@@ -237,6 +238,7 @@
                 `;
                 } else {
                     rowHTML += `
+                    <td>${data.upi_name}</td>
                     <td>${data.upi_id}</td>
                     <td>${data.qr_code ? `<img src="https://manual.shyamplay.in/${data.qr_code}" alt="QR Code" width="50" height="50">` : ''}</td>
                 `;

@@ -225,14 +225,18 @@
                 <td>${user.payment_screenshort ? `<img src="https://manual.shyamplay.in/${user.payment_screenshort}" alt="payment screenshot" width="25" height="25" onclick="openModalz('https://manual.shyamplay.in/${user.payment_screenshort}')" />` : 'No Image'}
                     <p><strong>Created At:</strong> ${user.created_at}</p>
                     <p><strong>UTR:</strong> ${user.upi_ref_number}</p>
+                    
+                    ${user.upi_id ? `<p><strong>UPI Name:</strong> ${user.upi_name}</p>
+                    <p><strong>UPI ID:</strong> ${user.upi_id}</p>` : `
+                    <p><strong>Account Name:</strong> ${user.bank_account_name}</p>
+                    <p><strong>Account No.:</strong> ${user.bank_account_number}</p>`}
                 </td>
                 <td class="payment-status">${user.payment_status}</td>
                 <td class="status">${user.status}</td>
                 <td>
                     <select
                         onchange="updateCredit(${user.id}, this.value)"
-                        data-original-status="${user.payment_status}"  <!-- Store the original status -->
-                    >
+                        data-original-status="${user.payment_status}">
                         <option value="pending" ${user.payment_status === 'pending' ? 'selected' : ''}>Pending</option>
                         <option value="completed" ${user.payment_status === 'completed' ? 'selected' : ''}>Completed</option>
                         <option value="rejected" ${user.payment_status === 'rejected' ? 'selected' : ''}>Rejected</option>

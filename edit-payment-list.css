@@ -378,6 +378,11 @@ body.dark {
   font-size: 20px;
 }
 
+.agent-form-big-box{
+  font-size: 14px;
+  font-weight: 600;
+}
+
 /* Radio Button */
 
 .radio-input input {

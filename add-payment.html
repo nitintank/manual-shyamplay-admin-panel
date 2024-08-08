@@ -147,6 +147,7 @@
             <div id="upi-details" style="display: none;">
                 <h3>Add UPI</h3>
                 <input id="upi_id" name="upi_id" type="text" placeholder="Enter UPI ID">
+                <input id="upi_name" name="upi_name" type="text" placeholder="Enter UPI Name">
                 <label for="">Add Company Logo</label>
                 <input id="qr_code" name="qr_code" type="file">
             </div>
@@ -172,6 +173,7 @@ function setDetailsType(type) {
         document.getElementById('bank-details').style.display = 'block';
         document.getElementById('upi-details').style.display = 'none';
         document.getElementById('upi_id').removeAttribute('required');
+        document.getElementById('upi_name').removeAttribute('required');
         document.getElementById('qr_code').removeAttribute('required');
         document.getElementById('bank_name').setAttribute('required', true);
         document.getElementById('bank_account_number').setAttribute('required', true);
@@ -185,6 +187,7 @@ function setDetailsType(type) {
         document.getElementById('ifsc_code').removeAttribute('required');
         document.getElementById('account_name').removeAttribute('required');
         document.getElementById('upi_id').setAttribute('required', true);
+        document.getElementById('upi_name').setAttribute('required', true);
         document.getElementById('qr_code').setAttribute('required', true);
     }
 }
@@ -224,6 +227,7 @@ async function handleSubmit(e) {
         }
     } else if (detailsType === 'upi') {
         formData.append('upi_id', document.getElementById('upi_id').value);
+        formData.append('upi_name', document.getElementById('upi_name').value);
         if (qrCode) {
             formData.append('qr_code', qrCode);
         }
@@ -238,7 +242,7 @@ async function handleSubmit(e) {
             });
             const data = await response.json();
             if (response.ok) {
-                messageElement.textContent = `UPI details updated successfully.`;
+                messageElement.textContent = `UPI Details Added Successfully`;
             } else {
                 messageElement.textContent = `Error: ${data.error}`;
             }

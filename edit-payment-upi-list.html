@@ -127,6 +127,7 @@
         <h2>Edit UPI Details</h2>
         <form id="upiDetailsForm" enctype="multipart/form-data" class="agent-form-big-box">
             <input id="upiId" type="text" placeholder="Enter UPI ID" required>
+            <input id="upiName" type="text" placeholder="Enter UPI Name" required>
             <label for="">Add Company Logo</label>
             <input id="qrCodeInput" accept="image/*" type="file">
             <img id="qrCodePreview" alt="QR Code Preview" width="100" height="100" style="display: none;" />
@@ -141,6 +142,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         const upiDetailsForm = document.getElementById('upiDetailsForm');
         const upiIdInput = document.getElementById('upiId');
+        const upiNameInput = document.getElementById('upiName');
         const qrCodeInput = document.getElementById('qrCodeInput');
         const qrCodePreview = document.getElementById('qrCodePreview');
         const urlParams = new URLSearchParams(window.location.search);
@@ -162,6 +164,7 @@
                 const { upi_detail } = data;
 
                 if (upiIdInput) upiIdInput.value = upi_detail.upi_id;
+                if (upiNameInput) upiNameInput.value = upi_detail.upi_name;
                 if (upi_detail.qr_code) {
                     qrCodePreview.src = `https://manual.shyamplay.in/${upi_detail.qr_code}`;
                     qrCodePreview.style.display = 'block';
@@ -188,6 +191,7 @@
 
             let formData = new FormData();
             formData.append('upi_id', upiIdInput.value);
+            formData.append('upi_name', upiNameInput.value);
             if (qrCodeInput.files[0]) {
                 formData.append('qr_code', qrCodeInput.files[0]);
             }

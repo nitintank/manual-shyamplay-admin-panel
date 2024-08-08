@@ -442,7 +442,7 @@ function renderFilteredTransactions(filteredTransactions) {
                     <p><strong>Created At:</strong> ${transaction.created_at}</p>
                     <p><strong>Transaction ID:</strong> ${transaction.upi_ref_number}</p>
                     <p><strong>Website Link:</strong> <a href="https://${transaction.website_link}">${transaction.website_link}</a></p>
-                    ${transaction.admin_upi_id ? `<p><strong>UPI ID:</strong> ${transaction.admin_upi_id}</p>` : `
+                    ${transaction.admin_upi_id ? `<p><strong>UPI Name:</strong> ${transaction.admin_upi_name}</p><p><strong>UPI ID:</strong> ${transaction.admin_upi_id}</p>` : `
                     <p><strong>Account Name:</strong> ${transaction.admin_account_name}</p>
                     <p><strong>Account Number:</strong> ${transaction.bank_account_number}</p>`}
                     ${transaction.description ? `<p><strong>Description:</strong> ${transaction.description}</p>` : `
