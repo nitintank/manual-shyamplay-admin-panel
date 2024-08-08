@@ -214,6 +214,9 @@
             };
 
             const populateUsers = (users) => {
+                
+                users.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
                 users.forEach((user, index) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
