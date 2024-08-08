@@ -135,8 +135,24 @@
             </div>
         </div>
         <div id="error" class="whiteText"></div>
-        <div class="credit-cards-big-box" id="transactionList">
-
+        <div class="credit-cards-big-box">
+            <table id="transactionTable">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Credit Name</th>
+                        <th>Company Name</th>
+                        <th>Website Link</th>
+                        <th>Amount</th>
+                        <th>Transaction Type</th>
+                        <th>Created At</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionList">
+                    <!-- Transactions will be rendered here -->
+                </tbody>
+            </table>
         </div>
     </section>
     <!-- JavaScript -->
@@ -207,28 +223,25 @@
         const renderTransactions = (transactions) => {
             transactionList.innerHTML = '';
             if (transactions.length === 0) {
-                transactionList.innerHTML = '<div class="whiteText">No Transaction History Found!</div>';
+                transactionList.innerHTML = '<tr><td colspan="8" class="whiteText">No Transaction History Found!</td></tr>';
                 return;
             }
 
             transactions.forEach(transaction => {
-                const div = document.createElement('div');
-                div.className = 'credit-cards-box';
+                const tr = document.createElement('tr');
 
-                div.innerHTML = `
-                <div class="id_inner_box_1">
-                    <p><strong>User Name:</strong> ${transaction.username}</p>
-                    ${transaction.credit_name ? `<p><strong>Credit Name:</strong> ${transaction.credit_name}</p>` : ''}
-                    <p><strong>Company Name:</strong> ${transaction.company_name}</p>
-                    <p><strong>Website Link:</strong> <a href="https://${transaction.website_link}" target="_blank">${transaction.website_link}</a></p>
-                    ${transaction.amount ? `<p><strong>Amount:</strong> ${transaction.amount}</p>` : ''}
-                    ${transaction.transaction_type ? `<p><strong>Transaction Type:</strong> ${transaction.transaction_type}</p>` : ''}
-                    ${transaction.created_at ? `<p><strong>Created At:</strong> ${transaction.created_at}</p>` : ''}
-                    <button class="${getStatusClassName(transaction.status)}">${transaction.status}</button>
-                </div>
-            `;
+                tr.innerHTML = `
+                    <td>${transaction.username}</td>
+                    <td>${transaction.credit_name || ''}</td>
+                    <td>${transaction.company_name}</td>
+                    <td><a href="https://${transaction.website_link}" target="_blank">${transaction.website_link}</a></td>
+                    <td>${transaction.amount || ''}</td>
+                    <td>${transaction.transaction_type || ''}</td>
+                    <td>${transaction.created_at || ''}</td>
+                    <td><button class="${getStatusClassName(transaction.status)}">${transaction.status}</button></td>
+                `;
 
-                transactionList.appendChild(div);
+                transactionList.appendChild(tr);
             });
         };
 

@@ -287,7 +287,7 @@ function renderFilteredTransactions(filteredTransactions) {
                 <p><strong>Payment Method:</strong> ${transaction.ifsc_code ? 'Bank' : 'UPI'}</p>
                 <p class="pay-shot-img">${transaction.payment_screenshort ? `<img src="https://manual.shyamplay.in/${transaction.payment_screenshort}" alt="payment screenshot" width="50" height="50" onclick="openModal('https://manual.shyamplay.in/${transaction.payment_screenshort}')" />` : ''}</p>
                 <p><strong>Created At:</strong> ${transaction.created_at}</p>
-                <p><strong>UPI Ref Number:</strong> ${transaction.upi_ref_number}</p>
+                <p><strong>Transaction ID:</strong> ${transaction.upi_ref_number}</p>
                 <p><strong>Website Link:</strong> <a href="https://${transaction.website_link}">${transaction.website_link}</a></p>
                 ${transaction.description ? `<p><strong>Description:</strong> ${transaction.description}</p>` : `
                 <div class="action-box">
@@ -440,8 +440,11 @@ function renderFilteredTransactions(filteredTransactions) {
                     <p><strong>Payment Method:</strong> ${transaction.ifsc_code ? 'Bank' : 'UPI'}</p>
                     <p class="pay-shot-img">${transaction.payment_screenshort ? `<img src="https://manual.shyamplay.in/${transaction.payment_screenshort}" alt="payment screenshot" width="50" height="50" onclick="openModal('https://manual.shyamplay.in/${transaction.payment_screenshort}')" />` : ''}</p>
                     <p><strong>Created At:</strong> ${transaction.created_at}</p>
-                    <p><strong>UPI Ref Number:</strong> ${transaction.upi_ref_number}</p>
+                    <p><strong>Transaction ID:</strong> ${transaction.upi_ref_number}</p>
                     <p><strong>Website Link:</strong> <a href="https://${transaction.website_link}">${transaction.website_link}</a></p>
+                    ${transaction.admin_upi_id ? `<p><strong>UPI ID:</strong> ${transaction.admin_upi_id}</p>` : `
+                    <p><strong>Account Name:</strong> ${transaction.admin_account_name}</p>
+                    <p><strong>Account Number:</strong> ${transaction.bank_account_number}</p>`}
                     ${transaction.description ? `<p><strong>Description:</strong> ${transaction.description}</p>` : `
                     <div class="action-box">
                         <button class="completed-btn" onclick="handleOpenDescriptionModal(${transaction.id}, 'approved')">Approve</button>
