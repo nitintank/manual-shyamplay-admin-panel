@@ -154,7 +154,7 @@
             </div> -->
             <button class="load-btn" onclick="filterTransactions()">Load</button>
         </div>
-        
+
 
         <!-- Deposit Withdrawal Request -->
         <div class="transfer-card-section">
@@ -179,7 +179,8 @@
             <div class="form-pop-box">
                 <textarea id="description" placeholder="Enter description"></textarea>
                 <div class="popup-btn-box-css">
-                    <button onclick="handleUpdateTransactionWithDescription()" class="green-btn"> <i class='bx bxs-badge-check'></i>Submit</button>
+                    <button onclick="handleUpdateTransactionWithDescription()" class="green-btn"> <i
+                            class='bx bxs-badge-check'></i>Submit</button>
                     <button onclick="handleCloseDescriptionModal()" class="red-btn">Cancel</button>
                 </div>
             </div>
@@ -200,10 +201,10 @@
         fetchTransactions();
 
         const searchUserInput = document.getElementById('searchUser');
-    const selectStatusInput = document.getElementById('selectStatus');
+        const selectStatusInput = document.getElementById('selectStatus');
 
-    searchUserInput.addEventListener('input', filterTransactions);
-    selectStatusInput.addEventListener('change', filterTransactions);
+        searchUserInput.addEventListener('input', filterTransactions);
+        selectStatusInput.addEventListener('change', filterTransactions);
 
         // Image modal functionality
         const imageModal = document.getElementById('imageModal');
@@ -218,38 +219,38 @@
                 imageModal.style.display = 'none';
             }
         }
-        
+
     });
 
     function filterTransactions() {
-    const searchUser = document.getElementById('searchUser').value.toLowerCase();
-    const selectStatus = document.getElementById('selectStatus').value;
-    const filteredTransactions = transactions.filter(transaction => {
-        const usernameMatch = transaction.user_name.toLowerCase().includes(searchUser);
-        const statusMatch = selectStatus === 'all' || 
-                            (viewType === 'withdraw' && transaction.withdraw_status === selectStatus) ||
-                            (viewType === 'deposit' && transaction.transaction_status === selectStatus);
-        return usernameMatch && statusMatch;
-    });
-    renderFilteredTransactions(filteredTransactions);
-}
+        const searchUser = document.getElementById('searchUser').value.toLowerCase();
+        const selectStatus = document.getElementById('selectStatus').value;
+        const filteredTransactions = transactions.filter(transaction => {
+            const usernameMatch = transaction.user_name.toLowerCase().includes(searchUser);
+            const statusMatch = selectStatus === 'all' ||
+                (viewType === 'withdraw' && transaction.withdraw_status === selectStatus) ||
+                (viewType === 'deposit' && transaction.transaction_status === selectStatus);
+            return usernameMatch && statusMatch;
+        });
+        renderFilteredTransactions(filteredTransactions);
+    }
 
-function renderFilteredTransactions(filteredTransactions) {
-    const transactionsContainer = document.getElementById('transactionsContainer');
-    const loadingText = document.getElementById('loadingText');
-    const errorText = document.getElementById('errorText');
+    function renderFilteredTransactions(filteredTransactions) {
+        const transactionsContainer = document.getElementById('transactionsContainer');
+        const loadingText = document.getElementById('loadingText');
+        const errorText = document.getElementById('errorText');
 
-    loadingText.style.display = 'none';
-    errorText.style.display = 'none';
-    transactionsContainer.style.display = 'flex';
-    transactionsContainer.innerHTML = '';
+        loadingText.style.display = 'none';
+        errorText.style.display = 'none';
+        transactionsContainer.style.display = 'flex';
+        transactionsContainer.innerHTML = '';
 
-    filteredTransactions.forEach(transaction => {
-        const transactionDiv = document.createElement('div');
-        transactionDiv.classList.add('transfer-card');
+        filteredTransactions.forEach(transaction => {
+            const transactionDiv = document.createElement('div');
+            transactionDiv.classList.add('transfer-card');
 
-        if (viewType === 'withdraw') {
-            transactionDiv.innerHTML = `
+            if (viewType === 'withdraw') {
+                transactionDiv.innerHTML = `
             <div class="transfer-card-top">
                 <p>${transaction.transaction_type}</p>
                 <div class="transfer-card-top-status">
@@ -264,7 +265,7 @@ function renderFilteredTransactions(filteredTransactions) {
                 <p><strong>IFSC Code:</strong> ${transaction.ifsc_code}</p>
                 <p><strong>Account Number / UPI ID:</strong> ${transaction.account_number ? transaction.account_number : transaction.upi_id}</p>
                 <p><strong>Account Name:</strong> ${transaction.account_name}</p>
-                <p>${transaction.qr_code_image ? `<img src="https://manual.shyamplay.in/${transaction.qr_code_image}" alt="QR code" onclick="openModal('https://manual.shyamplay.in/${transaction.qr_code_image}')" width="50" height="50" />` : ''}</p>
+                <p><strong>Account Name / UPI Name:</strong> ${transaction.account_name ? transaction.account_name : transaction.qr_code_image}</p>
                 ${transaction.description ? `<p><strong>Description:</strong> ${transaction.description}</p>` : `
                 <div class="action-box">
                     <button class="completed-btn" onclick="handleOpenDescriptionModal(${transaction.id}, 'approved')">Approve</button>
@@ -274,8 +275,8 @@ function renderFilteredTransactions(filteredTransactions) {
                 <h2 class="amount-status">${transaction.amount}</h2>
             </div>
             `;
-        } else {
-            transactionDiv.innerHTML = `
+            } else {
+                transactionDiv.innerHTML = `
             <div class="transfer-card-top">
                 <p>${transaction.transaction_type}</p>
                 <div class="transfer-card-top-status">
@@ -298,11 +299,11 @@ function renderFilteredTransactions(filteredTransactions) {
                 <h2 class="amount-status">${transaction.amount}</h2>
             </div>
             `;
-        }
+            }
 
-        transactionsContainer.appendChild(transactionDiv);
-    });
-}
+            transactionsContainer.appendChild(transactionDiv);
+        });
+    }
 
     function updateViewType(type) {
         viewType = type;
@@ -416,8 +417,7 @@ function renderFilteredTransactions(filteredTransactions) {
                     <p><strong>Created At:</strong> ${transaction.created_at}</p>
                     <p><strong>IFSC Code:</strong> ${transaction.ifsc_code}</p>
                     <p><strong>Account Number / UPI ID:</strong> ${transaction.account_number ? transaction.account_number : transaction.upi_id}</p>
-                    <p><strong>Account Name:</strong> ${transaction.account_name}</p>
-                    <p class="pay-shot-img">${transaction.qr_code_image ? `<img src="https://manual.shyamplay.in/${transaction.qr_code_image}" alt="QR code" onclick="openModal('https://manual.shyamplay.in/${transaction.qr_code_image}')" width="50" height="50" />` : ''}</p>
+                    <p><strong>Account Name / UPI Name:</strong> ${transaction.account_name ? transaction.account_name : transaction.qr_code_image}</p>
                     ${transaction.description ? `<p><strong>Description:</strong> ${transaction.description}</p>` : `
                     <div class="action-box">
                         <button class="completed-btn" onclick="handleOpenDescriptionModal(${transaction.id}, 'approved')">Approve</button>
